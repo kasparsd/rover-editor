@@ -39,7 +39,6 @@ var posi_location = 0;
 var keys_ignore = [ 91, 17, 18, 8, 9, 229, 16, 32 ];
 
 editor_area.onkeydown = function(e) {
-	console.log(e);
 	if ( e.keyCode == 9 )
 		e.preventDefault();
 
@@ -95,6 +94,7 @@ document.onkeydown = function(e) {
 			client.writeFile( 'index.md', editor_area.innerText, function( error, stat ) {
 				console.log( error, stat );
 			});
+			
 			return false;
 		}
 	}
