@@ -630,15 +630,14 @@ hljs.LANGUAGES.markdown = function(hljs){
         contains: [
           {
             className: 'link_label',
-            begin: '\\[.+\\]'
+            begin: '\\[', end: '\\]',
           },
           {
             className: 'link_url',
             begin: '\\(', end: '\\)',
-            excludeBegin: true, excludeEnd: true
           }
         ]
-      }
+      },
     ]
   };
 }(hljs);
