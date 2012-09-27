@@ -44,7 +44,7 @@ Please visit [rover.konstruktors.com](http://rover.konstruktors.com) and authori
 ## Todo
 
 * 	Add file browser
-* 	Add theme support
+* 	<del>Add theme support</del>
 
 
 ## Known Bugs
