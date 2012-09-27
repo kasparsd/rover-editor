@@ -10,11 +10,9 @@ It was inspired by [Mou](http://mouapp.com/), created by [Chen Luo](http://chenl
 
 ## Author
 
-Kaspars Dambis  
+**Kaspars Dambis**  
 <http://konstruktors.com>  
 [@konstruktors](http://twitter.com/konstruktors)
-
-First released on September 27, 2012.
 
 
 ## Features
