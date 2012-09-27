@@ -1,6 +1,10 @@
 # Rover Editor
 
-Rover is a simple web based text editor with support for Markdown syntax highlighting and Dropbox storage.
+**Rover is a *prototype* of a simple HTML5 based text editor that supports Markdown syntax highlighting and uses Dropbox for storage.**
+
+It is the first web based editor to support *real-time* Markdown highlighting and work in all browsers (including iPhone, iPad and all Webkit mobile).
+
+It was inspired by [Mou](http://mouapp.com/), created by [Chen Luo](http://chenluois.com/).
 
 ## Author
 
