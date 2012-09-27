@@ -14,6 +14,18 @@ Kaspars Dambis
 <http://konstruktors.com>  
 [@konstruktors](http://twitter.com/konstruktors)
 
+First released on September 27, 2012.
+
+
+## Features
+
+* 	No dependencies or server-side requirements. Can be hosted on any hosting platform (even Dropbox public storage).
+
+
+## Demo
+
+Please visit [rover.konstruktors.com](http://rover.konstruktors.com) and authorise with your Dropbox account to try it out.
+
 ## Rover Uses
 
 * 	[highlight.js](http://softwaremaniacs.org/soft/highlight/en/) [on GitHub](https://github.com/isagalaev/highlight.js) by [Ivan Sagalaev](http://softwaremaniacs.org/) for syntax highlighting.
@@ -21,3 +33,20 @@ Kaspars Dambis
 	I have modified the library to remove syntax detection, in order to improve performance (it reformats content on every `keydown`).
 
 * 	[dropbox-js](https://github.com/dropbox/dropbox-js) by [Dropbox](https://github.com/dropbox) for synchronisation with Dropbox.
+
+## Changelog
+
+### Sep 27, 2012
+
+* 	Initial public release. This is magical!
+
+
+## Todo
+
+* 	Add file browser
+* 	Add theme support
+
+
+## Known Bugs
+
+* 	TODO
