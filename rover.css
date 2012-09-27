@@ -8,5 +8,5 @@ body { color:#333; font:16px/1.3 sans-serif; position:absolute; margin:0; paddin
 #editor-editarea .strong { font-weight:bold; color:red; }
 #editor-editarea .code { color:green; }
 #editor-editarea .blockquote { color:#999; }
-#editor-editarea .link_label { color:purple; }
-#editor-editarea .link_url { color:lightblue; }	
+#editor-editarea .link_label { color:purple; white-space:pre; }
+#editor-editarea .link_url { color:lightblue; white-space:pre; }	
