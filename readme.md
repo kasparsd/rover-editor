@@ -19,6 +19,8 @@ It was inspired by [Mou](http://mouapp.com/), created by [Chen Luo](http://chenl
 
 * 	No dependencies or server-side requirements. Can be hosted on any hosting platform (even Dropbox public storage).
 
+* 	Supports user stylesheets (stored in your Dropbox) for customizing the look and feel of the editor.
+
 
 ## Demo
 
