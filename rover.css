@@ -1,6 +1,6 @@
 body { color:#333; font:16px/1.3 sans-serif; position:absolute; margin:0; padding:0; background:#eee; width:100%; height:100% }
-.section-chrome { background:#eee; }
-#editor-editarea { white-space: pre-wrap; font:18px/1.3 menlo, monospace; margin:0 auto; max-width:700px; padding:1em; outline:none; }
+.section-chrome {  }
+#editor-editarea { white-space: pre-wrap; font:18px/1.3 menlo, monospace; margin:0 auto; max-width:700px; min-height:90%; padding:1em; outline:none; }
 
 #editor-editarea .bullet { color:gray; }
 #editor-editarea .header { color:#66c; font-size:1.2em; font-weight:bold; margin-left:-0.5em; }
