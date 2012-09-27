@@ -1,0 +1,8 @@
+#rover .bullet { color:gray; }
+#rover .header { color:#66c; font-size:1.2em; font-weight:bold; }
+#rover .emphasis { font-style:italic; color:orange; }
+#rover .strong { font-weight:bold; }
+#rover .code { color:green; }
+#rover .blockquote { color:#999; }
+#rover .link_label { color:purple; white-space:pre; }
+#rover .link_url { color:lightblue; white-space:pre; }	
