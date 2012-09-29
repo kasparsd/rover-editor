@@ -12,12 +12,28 @@
 </head>
 <body>
 
-<div class="section-chrome">
-	<pre id="rover" contenteditable="true"></pre>
-</div>
+<nav id="pages">
+	<ul>
+		<li class="page page-rover">
+			<article class="page-in">
+				<header id="header">
+					<strong id="doc-title" contenteditable="true">Filename.md</strong>
+				</header>
+				<pre id="rover" contenteditable="true"></pre>
+			</article>
+		</li>
+		<li class="page page-preview">
+			<article class="page-in">
+				<div id="preview"></div>
+			</article>
+		</li>
+	</ul>
+</nav>
 
 <script src="scripts/dropbox.min.js"></script>
 <script src="scripts/highlight.pack.js"></script>
+<script src="scripts/showdown.js"></script>
+<script src="scripts/swipe.js"></script>
 <script src="rover.js"></script>
 
 </body>
