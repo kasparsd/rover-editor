@@ -6,3 +6,6 @@
 #rover .blockquote { color:#999; }
 #rover .link_label { color:purple; white-space:pre; }
 #rover .link_url { color:lightblue; white-space:pre; }	
+
+#preview { overflow:hidden; }
+#preview pre { white-space:pre; background:#ddd; padding:1em; overflow:hidden; overflow-x:scroll; }

@@ -1,5 +1,7 @@
 
 var editor_area = document.getElementById('rover');
+var preview_area = document.getElementById('preview');
+var showdown = new Showdown.converter();
 
 var client = new Dropbox.Client({
 		key: "OmgelmwkX6A=|DKcxwZXyEzMxlWUoKdWi0Wmb3WDTj9JIs55wa7frZg==", 
@@ -27,7 +29,7 @@ var init = function () {
 	client.readFile( 'rover-theme.css', function( error, data ) {
 		
 		// Store the default style on Dropbox for future use
-		if ( error && error.status == 404 ) {
+		if ( 1 == 1 || error && error.status == 404 ) {
 
 			// Use AJAX to retrieve the default Rover stylesheet
 			var areq = new XMLHttpRequest();
@@ -64,8 +66,23 @@ var init = function () {
 
 		editor_area.innerText = data;
 		hljs.highlightBlock( editor_area, false, true );
+		preview_area.innerHTML = showdown.makeHtml( editor_area.innerText );
 	});
 }
+
+
+var panes = new Swipe( document.getElementById('pages'), {
+		callback: function( a, b ) {
+			for ( s in this.slides )
+				if ( s == this.index )
+					this.slides[s].style.overflow = 'scroll';
+				else if ( s > -1 )
+					this.slides[s].style.overflow = 'hidden';
+
+			if ( b == 2 )
+				preview_area.innerHTML = showdown.makeHtml( editor_area.innerText );
+		}
+	});
 
 var posi_key = '語';
 var posi = document.createTextNode( posi_key );
