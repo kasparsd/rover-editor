@@ -76,7 +76,7 @@ var dropbox_browser_load_folder = function( path, parent ) {
 
 			// Create file anchor
 			var link = document.createElement('a');
-			link.innerText = entry_stats[e].name;
+			link.innerHTML = entry_stats[e].name;
 			link.href = entry_stats[e].path;
 
 			li.appendChild( link );
@@ -121,20 +121,25 @@ var editor_load_file = function( file ) {
 		}
 
 		editor_area.className = editor_area.className.replace( 'loading', '' );
+		editor_area.focus();
 	});
 }
 
 
 var panes = new Swipe( document.getElementById('pages'), {
 		callback: function( a, b ) {
+			// Make only the current pane scroll, while the rest are overflow:hidden
 			for ( s in this.slides )
 				if ( s == this.index )
 					this.slides[s].style.overflow = null;
 				else if ( s > -1 )
 					this.slides[s].style.overflow = 'hidden';
 
+			// Update the preview pane, if moving to preview pane
 			if ( b == 1 )
 				preview_area.innerHTML = showdown.makeHtml( editor_area.innerText );
+			else
+				editor_area.blur();
 		}
 	});
 
@@ -215,11 +220,12 @@ var dropbox_touch_handler = function(e) {
 		return false;
 
 	if ( e.target.offsetParent.className.indexOf('file') !== -1 ) {
-		// Load the file into editor
-		editor_load_file( e.target.pathname );
+		history.pushState( 'edit', 'edit', '#/edit' + e.target.pathname );
 		panes.slide(1);
 
-		history.pushState( 'home', 'home', '#!/edit' + e.target.pathname );
+		// Load the file into editor
+		editor_load_file( e.target.pathname );
+
 	} else if ( e.target.offsetParent.className.indexOf('folder') !== -1 ) {
 		// Unfold the folder
 		if ( ! e.target.nextSibling )
@@ -232,16 +238,23 @@ var dropbox_touch_handler = function(e) {
 			e.target.offsetParent.className = e.target.offsetParent.className.replace(' expanded', '');
 	}
 
-	return false;
+	e.stopPropagation();
+	e.preventDefault();
 }
 
 dropbox_browser.onclick = dropbox_touch_handler;
 dropbox_browser.ontouchstart = dropbox_touch_handler;
 
 window.addEventListener( 'popstate', function(e) {
-	//console.log(e);
-   	if ( e.state == 'home' )
+   	if ( history.state == 'edit' ) {
+   		editor_load_file( location.hash.replace( '#/edit', '' ) );
+		panes.slide(1);
+   	} else {
    		panes.slide(0);
+   	}
+
+   	editor_area.blur();
+   	return false;
 });
 
 
