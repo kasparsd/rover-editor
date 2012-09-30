@@ -23,6 +23,9 @@ client.authenticate(function( error, client ) {
 });
 
 var init = function () {
+	// Load the Dropbox file browser
+	dropbox_browser_load_folder( '/' );
+
 	// Add user editor style to DOM
 	var rover_style = document.createElement('style');
 	rover_style.id = 'rover_style';
@@ -56,8 +59,6 @@ var init = function () {
 		}
 
 	});
-
-	dropbox_browser_load_folder( '/' );
 }
 
 var dropbox_browser_load_folder = function( path, parent ) {
