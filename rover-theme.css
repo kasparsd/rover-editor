@@ -1,8 +1,12 @@
 #rover .bullet { color:gray; }
 #rover .header { color:black; font-size:1.2em; font-weight:bold; }
 #rover .emphasis { font-style:italic; color:black; }
-#rover .strong { font-weight:bold; color:black; }
+#rover .strong { font-weight:bold; }
 #rover .code { color:green; }
 #rover .blockquote { color:#999; }
 #rover .link_label { font-weight:bold; color:purple; white-space:pre; }
-#rover .link_url { color:darkblue; white-space:pre; }	
+#rover .link_url { color:#999; white-space:pre; }	
+
+#preview { overflow:hidden; }
+#preview pre { white-space:pre; background:#ddd; padding:1em; overflow:hidden; overflow-x:scroll; }
+#preview img { max-width:100%; }
