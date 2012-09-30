@@ -1,5 +1,8 @@
 
+
+var dropbox_browser = document.getElementById('dropbox-browser');
 var editor_area = document.getElementById('rover');
+var doc_title = document.getElementById('doc-title');
 var preview_area = document.getElementById('preview');
 var showdown = new Showdown.converter();
 
@@ -54,19 +57,69 @@ var init = function () {
 
 	});
 
-	client.readFile( 'index.md', function( error, data ) {
-		if ( error && error.status == 404 )
-			client.writeFile( 'index.md', '# Welcome to Rover', function( error, stat ) {
-				if ( ! error )
-					init();
-			});
-		
+	dropbox_browser_load_folder( '/' );
+}
+
+var dropbox_browser_load_folder = function( path, parent ) {
+	client.readdir( path, function( error, entries, dir_stat, entry_stats ) {
+		if (error) {
+			console.log(error);
+			return;
+		}
+
+		// Build the file list
+		var ul = document.createElement('ul');
+
+		for ( var e in entries ) {
+			var li = document.createElement('li');
+
+			// Create file anchor
+			var link = document.createElement('a');
+			link.innerText = entry_stats[e].name;
+			link.href = entry_stats[e].path;
+
+			li.appendChild( link );
+
+			if ( entry_stats[e].isFile )
+				li.className = 'file';
+			else if ( entry_stats[e].isFolder )
+				li.className = 'folder';
+
+			if ( entry_stats[e].isFile && entry_stats[e].name.indexOf('.md') == -1 )
+				li.className += ' disabled';
+
+			ul.appendChild( li );
+		}
+
+		if ( parent )
+			parent.appendChild( ul );
+		else {
+			dropbox_browser.appendChild( ul );
+			dropbox_browser.style.visibility = 'visible';
+			document.getElementById('dropbox-auth').style.visibility = 'hidden';
+		}
+	});
+}
+
+
+var editor_load_file = function( file ) {
+	// Empty the editor
+	editor_area.className += 'loading';
+	editor_area.innerText = '';
+	doc_title.innerText = file.replace(/\\/g,'/').replace( /.*\//, '' );
+
+	client.readFile( file, function( error, data ) {
 		if ( error )
 			console.log( 'is error', error );
 
 		editor_area.innerText = data;
-		hljs.highlightBlock( editor_area, false, true );
-		preview_area.innerHTML = showdown.makeHtml( editor_area.innerText );
+
+		if ( file.indexOf('.md') !== -1 ) {
+			hljs.highlightBlock( editor_area, false, true );
+			preview_area.innerHTML = showdown.makeHtml( editor_area.innerText );
+		}
+
+		editor_area.className = editor_area.className.replace( 'loading', '' );
 	});
 }
 
@@ -75,11 +128,11 @@ var panes = new Swipe( document.getElementById('pages'), {
 		callback: function( a, b ) {
 			for ( s in this.slides )
 				if ( s == this.index )
-					this.slides[s].style.overflow = 'scroll';
+					this.slides[s].style.overflow = null;
 				else if ( s > -1 )
 					this.slides[s].style.overflow = 'hidden';
 
-			if ( b == 2 )
+			if ( b == 1 )
 				preview_area.innerHTML = showdown.makeHtml( editor_area.innerText );
 		}
 	});
@@ -152,4 +205,44 @@ document.onkeydown = function(e) {
 			return false;
 		}
 	}
-};	
+}
+
+var dropbox_touch_handler = function(e) {
+
+	// This is a file that we can't edit, bail out
+	if ( e.target.offsetParent.className.indexOf('disabled') !== -1 )
+		return false;
+
+	if ( e.target.offsetParent.className.indexOf('file') !== -1 ) {
+		// Load the file into editor
+		editor_load_file( e.target.pathname );
+		panes.slide(1);
+
+		history.pushState( 'home', 'home', '#!/edit' + e.target.pathname );
+	} else if ( e.target.offsetParent.className.indexOf('folder') !== -1 ) {
+		// Unfold the folder
+		if ( ! e.target.nextSibling )
+			dropbox_browser_load_folder( e.target.pathname, e.target.offsetParent );
+
+		// Toggle expand state
+		if ( e.target.offsetParent.className.indexOf('expanded') == -1 )
+			e.target.offsetParent.className += ' expanded';
+		else
+			e.target.offsetParent.className = e.target.offsetParent.className.replace(' expanded', '');
+	}
+
+	return false;
+}
+
+dropbox_browser.onclick = dropbox_touch_handler;
+dropbox_browser.ontouchstart = dropbox_touch_handler;
+
+window.addEventListener( 'popstate', function(e) {
+	//console.log(e);
+   	if ( e.state == 'home' )
+   		panes.slide(0);
+});
+
+
+
+

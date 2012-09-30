@@ -6,22 +6,35 @@
 	<link rel="stylesheet" href="rover.css" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
-	<link rel="icon" href="icon.png" />
-	<link rel="apple-touch-icon" href="icon.png" />
-	<link rel="apple-touch-icon-precomposed" href="icon.png" />
+	<link rel="icon" href="images/icon.png" />
+	<link rel="apple-touch-icon" href="images/icon.png" />
+	<link rel="apple-touch-icon-precomposed" href="images/icon.png" />
 </head>
 <body>
 
 <nav id="pages">
 	<ul>
-		<li class="page page-rover">
+		<li class="page page-home">
 			<article class="page-in">
-				<header id="header">
-					<strong id="doc-title" contenteditable="true">Filename.md</strong>
-				</header>
-				<pre id="rover" contenteditable="true"></pre>
+				<div id="home">
+					<section id="dropbox">
+						<h1>Dropbox</h1>
+						<nav id="dropbox-browser"></nav>
+						<a id="dropbox-auth" href="#dropbox-auth">Authorize with Dropbox</a>
+					</section>
+				</div>
 			</article>
 		</li>
+
+		<li class="page page-rover">
+			<article class="page-in">
+				<header>
+					<strong id="doc-title"></strong>
+				</header>
+				<pre id="rover" spellcheck="true" contenteditable="true"></pre>
+			</article>
+		</li>
+
 		<li class="page page-preview">
 			<article class="page-in">
 				<div id="preview"></div>
