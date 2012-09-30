@@ -1,11 +1,12 @@
 html, body { width:100%; height:100%; }
-body { color:#333; font:16px/1.3 sans-serif; margin:0; padding:0; background:#eee; position:absolute; overflow:hidden; width:100%; height:100% }
+body { color:#333; font:16px/1.3 sans-serif; margin:0; padding:0; background:#eee; }
 
-#pages { overflow-x:hidden; overflow-y:scroll; -webkit-overflow-scrolling: touch; }
-#pages .page { height:inherit; display:block; float:left; vertical-align:top; }
-#pages .page-in { width:100%; clear:both; height:inherit; }
+#pages { overflow:hidden; }
+#pages .page { display:block; width:100%; float:left; vertical-align:top; }
+#pages .page-in { width:100%; clear:both; }
 
 #home { padding:0 2em; }
+#dropbox { }
 #dropbox-browser { visibility:hidden; background:#777; border-radius:4px; padding:0.2em 0; }
 #dropbox-browser a { display:block; text-decoration:none; color:#fff; text-shadow:-1px 1px 0 #555; padding:0.75em 2em; border-bottom:1px solid #666; }
 #dropbox-browser ul { display:block; margin:0; padding:0; }
