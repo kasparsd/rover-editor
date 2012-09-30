@@ -6,6 +6,19 @@ var doc_title = document.getElementById('doc-title');
 var preview_area = document.getElementById('preview');
 var showdown = new Showdown.converter();
 
+window.showdown_url_replace = function( url ) {
+	var base = doc_title.getAttribute('rel').replace(/\\/g,'/').replace(/\/[^\/]*$/, '');
+	
+	client.makeUrl( base + '/' + url, { download: true }, function( error, data ) {
+		if ( error )
+			console.log(error);
+		else
+			preview_area.innerHTML = preview_area.innerHTML.replace( url, data.url );
+	});
+
+	return url;
+}
+
 var client = new Dropbox.Client({
 		key: "OmgelmwkX6A=|DKcxwZXyEzMxlWUoKdWi0Wmb3WDTj9JIs55wa7frZg==", 
 		sandbox: true
@@ -108,6 +121,7 @@ var editor_load_file = function( file ) {
 	editor_area.className += 'loading';
 	editor_area.innerText = '';
 	doc_title.innerText = file.replace(/\\/g,'/').replace( /.*\//, '' );
+	doc_title.setAttribute( 'rel', file );
 
 	client.readFile( file, function( error, data ) {
 		if ( error )
@@ -131,15 +145,16 @@ var panes = new Swipe( document.getElementById('pages'), {
 			// Make only the current pane scroll, while the rest are overflow:hidden
 			for ( s in this.slides )
 				if ( s == this.index )
-					this.slides[s].style.overflow = null;
+					this.slides[s].style.height = null;
 				else if ( s > -1 )
-					this.slides[s].style.overflow = 'hidden';
+					this.slides[s].style.height = 'inherit';
 
 			// Update the preview pane, if moving to preview pane
-			if ( b == 1 )
+			if ( b == 2 ) {
 				preview_area.innerHTML = showdown.makeHtml( editor_area.innerText );
-			else
+			} else {
 				editor_area.blur();
+			}
 		}
 	});
 
@@ -256,7 +271,6 @@ window.addEventListener( 'popstate', function(e) {
    	editor_area.blur();
    	return false;
 });
-
 
 
 
