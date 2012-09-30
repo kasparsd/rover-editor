@@ -17,11 +17,13 @@ body { color:#333; font:16px/1.3 sans-serif; margin:0; padding:0; background:#ee
 #dropbox-browser .disabled a { color:#999; text-shadow:none; }
 #dropbox-browser .folder ul .folder:before { left:2em; }
 #dropbox-browser .expanded.folder:before { border-color:transparent; border-top-color:#ccc; top:1.2em; margin-left:-0.3em; }
-#dropbox-browser > ul > li:last-child, #dropbox-browser > ul > li:last-child > a { border-bottom:none; }
 #dropbox-browser > ul > li.expanded:last-child > a { border-bottom:1px solid #666; }
-#dropbox-browser > ul > li.expanded:last-child li:last-child,
+#dropbox-browser > ul > li:last-child, 
+#dropbox-browser > ul > li:last-child > a,
 #dropbox-browser > ul > li.expanded:last-child ul,
-#dropbox-browser > ul > li.expanded:last-child li:last-child a { border-bottom:none; }
+#dropbox-browser li li:last-child,
+#dropbox-browser li li:last-child ul,
+#dropbox-browser li li:last-child a { border-bottom:none; }
 
 #dropbox-auth { display:block; padding:0.5em 1em; margin:1em 0; background:#288CD8; color:#fff; text-align:center; text-decoration:none; border-radius:4px; }
 
