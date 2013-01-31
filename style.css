@@ -1,0 +1,24 @@
+html, body { width:100%; height:100%; margin:0; padding:0; background:#eee; overflow:hidden; }
+body { color:#333; font:16px/1.3 sans-serif; margin:0; padding:0; }
+ul, li { display:block; margin:0; padding:0; list-style:none; }
+a { text-decoration:none; } 
+
+.panes { height:100%; }
+.pane { position:relative; overflow:hidden; overflow-y:scroll; height:100%; }
+
+#pane-browser { width:12em; position:absolute; left:0; top:0; bottom:0; } 
+#pane-browser h1 { font-size:1em; padding:0.3em 1.5em; margin:1em 0 0 0; }
+#pane-browser nav { font-size:0.8em; line-height:1.1; overflow:hidden; }
+#pane-browser li { position:relative; padding-left:0.5em; }
+#pane-browser .folder:before { content:''; display:block; border:4px solid transparent; border-left-color:#999; border-left-width:6px; float:left; width:0; height:0; margin:0.5em -10em -10em 0.2em; }
+#pane-browser .expanded:before { border:4px solid transparent; border-top-color:#666; border-top-width:6px; margin:0.5em 0 0 0; }
+#pane-browser li a { color:#333; display:block; padding:0.2em 1em; margin:0.1em 0; }
+#pane-browser li ul { padding-left:1em; }
+#pane-browser .open > a { font-weight:bold; }
+#pane-browser .message { margin:0 1.5em; color:#999; }
+#pane-browser .message p { margin:0; }
+
+#pane-editor { margin-left:12em; }
+#pane-editor pre { outline:none; background:#fff; padding:1em 1.5em; margin:0 auto; display:block; height:100%; max-width:40em; }
+
+.resize { display:block; position:absolute; top:0; bottom:0; right:-3px; width:5px; cursor:e-resize; }

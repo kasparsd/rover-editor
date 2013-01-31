@@ -1,10 +1,9 @@
 <!doctype html>
-<html>
+<html ng-app="rover">
 <head>
 	<meta charset="utf-8" />
 	<title>Rover</title>
-	<link rel="stylesheet" href="scripts/codemirror-2.34/lib/codemirror.css" />
-	<link rel="stylesheet" href="rover.css" />
+	<link rel="stylesheet" href="style.css" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<link rel="icon" href="images/icon.png" />
@@ -12,50 +11,39 @@
 	<link rel="apple-touch-icon-precomposed" href="images/icon.png" />
 </head>
 <body>
+<div class="panes">
+	<div class="pane" id="pane-browser">
+		<nav ng-controller="DropboxAuth">
+			<h1>Dropbox</h1>
 
-<nav id="pages">
-	<ul>
-		<li class="page page-home">
-			<article class="page-in">
-				<div id="home">
-					<section id="dropbox">
-						<h1>Dropbox</h1>
-						<nav id="dropbox-browser" class="file-browser"></nav>
-						<a id="dropbox-auth" href="#dropbox-auth">Authorize with Dropbox</a>
-					</section>
-				</div>
-			</article>
-		</li>
+			<script type="text/ng-template" id="file_tree_item">
+				<a ng-href="#browse{{ data.path }}" ng-click="expand(data)">{{ data.name }}</a>
+				<ul ng-hide="data.isFile">
+					<li ng-repeat="data in data.nodes" ng-include="'file_tree_item'" ng-class="{ folder: data.isFolder, file: data.isFile }"></li>
+				</ul>
+			</script>
 
-		<li class="page page-rover">
-			<article class="page-in">
-				<header class="page-header">
-					<a href="#/browser" id="link-browser" class="button">Browse</a>
-					<p class="path-wrap">
-						<label><input type="text" name="doc-title" id="doc-title" autocapitalize="off" autocorrect="off" /></label>
-					</p>
-					<a href="#/preview" id="link-preview" class="button">Preview</a>
-					<a href="#/save" id="link-save" class="button">Save</a>
-				</header>
-				<textarea id="rover"></textarea>
-			</article>
-		</li>
+			<ul ng-controller="TreeController">
+				<li ng-repeat="data in tree" ng-include="'file_tree_item'" ng-class="{ folder: data.isFolder, file: data.isFile, closes: false }"></li>
+			</ul>
 
-		<!--
-		<li class="page page-preview">
-			<article class="page-in">
-				<div id="preview"></div>
-			</article>
-		</li>
-		-->
-	</ul>
-</nav>
+			<div ng-show="! messages.dropbox.length" class="message">
+				<p ng-show="! data.length && dropbox_client.isAuthenticated"> Loading...</p>
+				<p ng-hide="dropbox_client.isAuthenticated"><a href="#" ng-click="dropbox_client.roverAuthInit()">Authorize Dropbox</a></p>
+			</div>
 
-<script src="scripts/dropbox.min.js"></script>
-<script src="scripts/codemirror-2.34/lib/codemirror.js"></script>
-<script src="scripts/codemirror-2.34/mode/markdown/markdown.js"></script>
-<script src="scripts/swipe.js"></script>
-<script src="rover.js"></script>
+			<div rel="pane-browser" class="resize"></div>
+		</nav>
+	</div>
+
+	<div class="pane" id="pane-editor">
+	
+	</div>
+</div>
+
+<script src="js/angular.min.js"></script>
+<script src="js/dropbox.min.js"></script>
+<script src="js/rover.js"></script>
 
 </body>
 </html>
