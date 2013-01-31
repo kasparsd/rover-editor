@@ -3,6 +3,7 @@
 <head>
 	<meta charset="utf-8" />
 	<title>Rover</title>
+	<link rel="stylesheet" href="scripts/codemirror-2.34/lib/codemirror.css" />
 	<link rel="stylesheet" href="rover.css" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -19,7 +20,7 @@
 				<div id="home">
 					<section id="dropbox">
 						<h1>Dropbox</h1>
-						<nav id="dropbox-browser"></nav>
+						<nav id="dropbox-browser" class="file-browser"></nav>
 						<a id="dropbox-auth" href="#dropbox-auth">Authorize with Dropbox</a>
 					</section>
 				</div>
@@ -28,24 +29,31 @@
 
 		<li class="page page-rover">
 			<article class="page-in">
-				<header>
-					<strong id="doc-title"></strong>
+				<header class="page-header">
+					<a href="#/browser" id="link-browser" class="button">Browse</a>
+					<p class="path-wrap">
+						<label><input type="text" name="doc-title" id="doc-title" autocapitalize="off" autocorrect="off" /></label>
+					</p>
+					<a href="#/preview" id="link-preview" class="button">Preview</a>
+					<a href="#/save" id="link-save" class="button">Save</a>
 				</header>
-				<pre id="rover" spellcheck="true" contenteditable="true"></pre>
+				<textarea id="rover"></textarea>
 			</article>
 		</li>
 
+		<!--
 		<li class="page page-preview">
 			<article class="page-in">
 				<div id="preview"></div>
 			</article>
 		</li>
+		-->
 	</ul>
 </nav>
 
 <script src="scripts/dropbox.min.js"></script>
-<script src="scripts/highlight.pack.js"></script>
-<script src="scripts/showdown.js"></script>
+<script src="scripts/codemirror-2.34/lib/codemirror.js"></script>
+<script src="scripts/codemirror-2.34/mode/markdown/markdown.js"></script>
 <script src="scripts/swipe.js"></script>
 <script src="rover.js"></script>
 

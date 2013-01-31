@@ -4,7 +4,22 @@ var dropbox_browser = document.getElementById('dropbox-browser');
 var editor_area = document.getElementById('rover');
 var doc_title = document.getElementById('doc-title');
 var preview_area = document.getElementById('preview');
-var showdown = new Showdown.converter();
+
+var has_touch_support = 'ontouchstart' in document.documentElement;
+
+var links = {
+	browser: document.getElementById('link-browser'),
+	save: document.getElementById('link-save'),
+	preview: document.getElementById('link-preview')
+};
+
+//var showdown = new Showdown.converter();
+var codemirror = CodeMirror.fromTextArea( editor_area, {
+		indentWithTabs: true,
+		matchBrackets: true,
+		lineWrapping: true,
+		theme: 'rover'
+	});
 
 window.showdown_url_replace = function( url ) {
 	var base = doc_title.getAttribute('rel').replace(/\\/g,'/').replace(/\/[^\/]*$/, '');
@@ -44,6 +59,7 @@ var init = function () {
 	rover_style.id = 'rover_style';
 	document.body.appendChild(rover_style);
 
+	/*
 	// Import the editor stylesheet
 	client.readFile( 'rover-theme.css', function( error, data ) {
 		
@@ -72,10 +88,12 @@ var init = function () {
 		}
 
 	});
+	*/
 }
 
 var dropbox_browser_load_folder = function( path, parent ) {
-	client.readdir( path, function( error, entries, dir_stat, entry_stats ) {
+
+	client.readdir( unescape( path ), function( error, entries, dir_stat, entry_stats ) {
 		if (error) {
 			console.log(error);
 			return;
@@ -84,13 +102,22 @@ var dropbox_browser_load_folder = function( path, parent ) {
 		// Build the file list
 		var ul = document.createElement('ul');
 
+		if ( parent ) {
+			var li = document.createElement('li');
+			var link = document.createElement('a');
+			li.className = 'back';
+			link.href = '..';
+			ul.appendChild( li.appendChild( link ).parentNode );
+			parent.parentNode.className = 'parent';
+		}
+
 		for ( var e in entries ) {
 			var li = document.createElement('li');
 
 			// Create file anchor
 			var link = document.createElement('a');
 			link.innerHTML = entry_stats[e].name;
-			link.href = entry_stats[e].path;
+			link.href = escape( entry_stats[e].path );
 
 			li.appendChild( link );
 
@@ -98,9 +125,6 @@ var dropbox_browser_load_folder = function( path, parent ) {
 				li.className = 'file';
 			else if ( entry_stats[e].isFolder )
 				li.className = 'folder';
-
-			if ( entry_stats[e].isFile && entry_stats[e].name.indexOf('.md') == -1 )
-				li.className += ' disabled';
 
 			ul.appendChild( li );
 		}
@@ -113,28 +137,24 @@ var dropbox_browser_load_folder = function( path, parent ) {
 			document.getElementById('dropbox-auth').style.visibility = 'hidden';
 		}
 	});
+
 }
 
 
 var editor_load_file = function( file ) {
+
 	// Empty the editor
 	editor_area.className += 'loading';
 	editor_area.innerText = '';
-	doc_title.innerText = file.replace(/\\/g,'/').replace( /.*\//, '' );
+	doc_title.value = file.replace(/\\/g,'/').replace( /.*\//, '' );
 	doc_title.setAttribute( 'rel', file );
 
 	client.readFile( file, function( error, data ) {
 		if ( error )
 			console.log( 'is error', error );
 
-		editor_area.innerText = data;
-
-		if ( file.indexOf('.md') !== -1 ) {
-			hljs.highlightBlock( editor_area, false, true );
-			preview_area.innerHTML = showdown.makeHtml( editor_area.innerText );
-		}
-
-		editor_area.className = editor_area.className.replace( 'loading', '' );
+		codemirror.setValue( data );
+		//editor_area.className = editor_area.className.replace( 'loading', '' );
 		editor_area.focus();
 	});
 }
@@ -151,106 +171,50 @@ var panes = new Swipe( document.getElementById('pages'), {
 
 			// Update the preview pane, if moving to preview pane
 			if ( b == 2 ) {
-				preview_area.innerHTML = showdown.makeHtml( editor_area.innerText );
+				//preview_area.innerHTML = showdown.makeHtml( editor_area.innerText );
 			} else {
 				editor_area.blur();
 			}
 		}
 	});
 
-var posi_key = '語';
-var posi = document.createTextNode( posi_key );
-var posi_location = 0;
-var keys_ignore = [ 91, 17, 18, 8, 9, 229, 16, 32 ];
-
-editor_area.onkeydown = function(e) {
-	if ( e.keyCode == 9 )
-		e.preventDefault();
-
-	if ( e.metaKey || e.shiftKey || e.keyLocation )
-		return;
-
-	if ( keys_ignore.indexOf( e.keyCode ) == -1 )
-		window.getSelection().getRangeAt(0).insertNode( posi );
-}
-
-editor_area.onpaste = function(e) {
-	e.preventDefault();
-
-	var clipboard = e.clipboardData.getData('text/plain');
-	var an = window.getSelection().anchorNode;
-	var offset = window.getSelection().anchorOffset + clipboard.length + 0;
-
-	if ( an.nodeValue ) {
-		an.nodeValue = an.nodeValue + clipboard;
-		window.getSelection().collapse( an, offset );
-	}
-}
-
-editor_area.onkeypress = function(e) {
-	// Apply highlighting only if position indicator is present
-	if ( this.innerText.indexOf( posi_key ) == -1 )
-		return;
-
-	hljs.highlightBlock( this, false, true );
-	
-	remove_posi( this );
-}
-
-var remove_posi = function( el ) {
-	// Remove position indicator from the markup
-	for ( child in el.childNodes ) {
-		var cn = el.childNodes[ child ];
-
-		if ( cn.nodeValue ) {
-			var cn_posi = cn.nodeValue.indexOf( posi_key );
-
-			if ( cn_posi !== -1 ) {
-				cn.nodeValue = cn.nodeValue.replace( posi_key, '' );
-				window.getSelection().collapse( cn, cn_posi );
-			}
-		} else {
-			remove_posi( cn );
-		}
-	}
-}
-
 document.onkeydown = function(e) { 
 	// Override Cmd+S for saving
+	/*
 	if ( e.metaKey && e.keyCode >= 65 && e.keyCode <= 90 ) {
 		if ( String.fromCharCode(e.keyCode) == 'S' ) {
-			client.writeFile( 'index.md', editor_area.innerText, function( error, stat ) {
+			client.writeFile( 'index.md', codemirror.getValue(), function( error, stat ) {
 				console.log( error, stat );
 			});
 			
 			return false;
 		}
 	}
+	*/
 }
 
 var dropbox_touch_handler = function(e) {
 
-	// This is a file that we can't edit, bail out
-	if ( e.target.offsetParent.className.indexOf('disabled') !== -1 )
-		return false;
+	if ( e.target.parentNode.className.indexOf('file') !== -1 ) {
 
-	if ( e.target.offsetParent.className.indexOf('file') !== -1 ) {
 		history.pushState( 'edit', 'edit', '#/edit' + e.target.pathname );
 		panes.slide(1);
 
 		// Load the file into editor
 		editor_load_file( e.target.pathname );
 
-	} else if ( e.target.offsetParent.className.indexOf('folder') !== -1 ) {
-		// Unfold the folder
-		if ( ! e.target.nextSibling )
-			dropbox_browser_load_folder( e.target.pathname, e.target.offsetParent );
+	} else if ( e.target.parentNode.className.indexOf('folder') !== -1 ) {
+
+		dropbox_browser_load_folder( e.target.pathname, e.target.parentNode );
 
 		// Toggle expand state
-		if ( e.target.offsetParent.className.indexOf('expanded') == -1 )
-			e.target.offsetParent.className += ' expanded';
+		if ( e.target.parentNode.className.indexOf('expanded') == -1 )
+			e.target.parentNode.className += ' expanded';
 		else
-			e.target.offsetParent.className = e.target.offsetParent.className.replace(' expanded', '');
+			e.target.parentNode.className = e.target.parentNode.className.replace(' expanded', '');
+	} else if ( e.target.getAttribute('href') == '..' ) {
+		e.target.parentNode.parentNode.parentNode.className = e.target.parentNode.parentNode.parentNode.className.replace(' expanded', '');
+		e.target.parentNode.parentNode.parentNode.parentNode.className = '';
 	}
 
 	e.stopPropagation();
@@ -261,16 +225,34 @@ dropbox_browser.onclick = dropbox_touch_handler;
 dropbox_browser.ontouchstart = dropbox_touch_handler;
 
 window.addEventListener( 'popstate', function(e) {
-   	if ( history.state == 'edit' ) {
-   		editor_load_file( location.hash.replace( '#/edit', '' ) );
+	if ( history.state == 'edit' ) {
+		editor_load_file( location.hash.replace( '#/edit', '' ) );
 		panes.slide(1);
-   	} else {
-   		panes.slide(0);
-   	}
+	}
 
    	editor_area.blur();
    	return false;
 });
 
+
+var save_document = function(e) {
+	var el = this;
+	this.className += ' loading';
+
+	client.writeFile( doc_title.getAttribute('rel'), codemirror.getValue(), function( error, stat ) {
+		console.log( error, stat );
+		el.className = el.className.replace( ' loading', '' );
+	});
+
+	e.preventDefault();
+}
+
+links.save.onclick = save_document;
+links.save.ontouchend = save_document;
+
+if ( has_touch_support ) {
+	links.preview.parentNode.removeChild( links.preview );
+	links.browser.parentNode.removeChild( links.browser );
+}
 
 
