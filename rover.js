@@ -19,22 +19,6 @@ window.showdown_url_replace = function( url ) {
 	return url;
 }
 
-var client = new Dropbox.Client({
-		key: "OmgelmwkX6A=|DKcxwZXyEzMxlWUoKdWi0Wmb3WDTj9JIs55wa7frZg==", 
-		sandbox: true
-	});
-
-client.authDriver( new Dropbox.Drivers.Redirect({ 
-	'rememberUser' : true 
-}) );
-
-client.authenticate(function( error, client ) {
-	if (error)
-		console.log( error );
-	else
-		init();
-});
-
 var init = function () {
 	// Load the Dropbox file browser
 	dropbox_browser_load_folder( '/' );
@@ -60,7 +44,7 @@ var init = function () {
 					rover_style.innerHTML = areq.responseText;
 
 					// Store the default theme on Dropbox
-					client.writeFile( 'rover-theme.css', areq.responseText, function( error, stat ) {});
+					//client.writeFile( 'rover-theme.css', areq.responseText, function( error, stat ) {});
 
 					return;
 				}
@@ -272,5 +256,21 @@ window.addEventListener( 'popstate', function(e) {
    	return false;
 });
 
+
+var client = new Dropbox.Client({
+		key: "pa48xgt8btjeboj", 
+		sandbox: true
+	});
+
+client.authDriver( new Dropbox.AuthDriver.Redirect({ 
+	'rememberUser' : true 
+}) );
+
+client.authenticate(function( error, client ) {
+	if (error)
+		console.log( error );
+	else
+		init();
+});
 
 
